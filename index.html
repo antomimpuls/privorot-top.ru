@@ -499,8 +499,8 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <body>
 
 <div class="sticky-messengers" id="stickyMessengers">
-<a href="https://wa.me/79614073808" class="btn btn-wa" target="_blank" rel="noopener" data-wa="true">📲 Чат в WhatsApp</a>
-<a href="https://t.me/anna_more_magic" class="btn btn-tg" target="_blank" rel="noopener" data-telegram="true">✈ Написать в Telegram</a>
+<a href="#" data-msg-url="https://wa.me/79614073808" class="btn btn-wa" target="_blank" rel="noopener" data-wa="true">📲 Чат в WhatsApp</a>
+<a href="#" data-msg-url="https://t.me/anna_more_magic" class="btn btn-tg" target="_blank" rel="noopener" data-telegram="true">✈ Написать в Telegram</a>
 </div>
 
 <section class="hero">
@@ -518,8 +518,8 @@ footer{background:#0a0814;padding:40px 0;text-align:center;border-top:1px solid 
 <div class="trust-item"><span style="font-size:1.5rem">📱</span><span style="font-size:0.85rem;font-weight:600">Поддержка 24/7</span></div>
         </div>
         <div class="hero-cta">
-        <a href="https://wa.me/79614073808" class="btn btn-wa" target="_blank" rel="noopener" data-wa="true">📲 Написать в WhatsApp</a>
-        <a href="https://t.me/anna_more_magic" class="btn btn-tg" target="_blank" rel="noopener" data-telegram="true">✈ Связаться в Telegram</a>
+        <a href="#" data-msg-url="https://wa.me/79614073808" class="btn btn-wa" target="_blank" rel="noopener" data-wa="true">📲 Написать в WhatsApp</a>
+        <a href="#" data-msg-url="https://t.me/anna_more_magic" class="btn btn-tg" target="_blank" rel="noopener" data-telegram="true">✈ Связаться в Telegram</a>
         </div>
         </div>
         <div>
@@ -1441,6 +1441,26 @@ ym(SITE_SETTINGS.yandexMetrikaId,"init",{clickmap:true,trackLinks:true,accurateT
 <noscript><div><img src="https://mc.yandex.ru/watch/99120458" style="position:absolute;left:-9999px;" alt="" id="ymImg"/></div></noscript>
 <script>if(SITE_SETTINGS.yandexMetrikaId){const ymImg=document.getElementById('ymImg');if(ymImg){ymImg.src=`https://mc.yandex.ru/watch/${SITE_SETTINGS.yandexMetrikaId}`}}</script>
 
+
+<script>
+/* ADSPOWER_NOHREF_GUARD: цель Метрики type=messenger срабатывает на клик по ссылке
+   wa.me/t.me. Убираем href у реального посетителя -> переход через window.open
+   (Метрика мессенджер-клик не видит). Трафик-бот восстанавливает href сам перед
+   кликом, тогда не мешаем (Метрика фиксирует ботовый переход). */
+(function(){
+  document.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[data-msg-url]') : null;
+    if(!a) return;
+    var h = a.getAttribute('href') || '';
+    if(/(?:wa\.me|t\.me)\//.test(h)) return; /* href восстановлен (бот) — не мешаем */
+    e.preventDefault();
+    var u = a.getAttribute('data-msg-url');
+    if(!u) return;
+    try { var w = window.open(u, '_blank', 'noopener'); if(!w) location.href = u; }
+    catch(err) { location.href = u; }
+  }, false);
+})();
+</script>
 </body>
 </html>
 
